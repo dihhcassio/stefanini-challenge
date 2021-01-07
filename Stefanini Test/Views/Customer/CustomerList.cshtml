@@ -1,0 +1,178 @@
+﻿@using Stefanini_Test.Domain.Enums;
+@using Stefanini_Test.Models;
+@{
+    if (Model.IsAdmin)
+    {
+        ViewBag.Title = "Customer List - Administrator";
+    }
+    else
+    {
+        ViewBag.Title = "Customer List - Seller";
+    }
+}
+@Styles.Render("~/Content/login.css")
+
+@model CustomerListModel
+
+<div class="container">
+    <div class="panel panel-default container-filter">
+        @using (Html.BeginForm("Search", "Customer", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", @id = "searchForm" }))
+        {
+            <div class="row">
+                <div class="form-group form-group-lg col-xs-6">
+                    <label class="col-sm-4 control-label" for="name">Name</label>
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Search.Name, new { htmlAttributes = new { @class = "form-control", @type = "text" } })
+                    </div>
+                </div>
+                <div class="form-group form-group-lg col-xs-4">
+                    <label class="col-sm-4 control-label" for="gender">Gender</label>
+                    <div class="col-sm-8">
+                        @Html.DropDownListFor(m => m.Search.Gender, new SelectList(Enum.GetValues(typeof(ECustumerGender))), "", new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group col-xs-2">
+                    <button type="submit" class="btn btn-default">Search</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group form-group-lg col-xs-6">
+                    <label class="col-sm-4 control-label" for="city">City</label>
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Search.City, new { htmlAttributes = new { @class = "form-control", @type = "text" } })
+                    </div>
+                </div>
+                <div class="form-group form-group-lg col-xs-4">
+                    <label class="col-sm-4 control-label" for="region">Region</label>
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Search.Region, new { htmlAttributes = new { @class = "form-control", @type = "text" } })
+                    </div>
+                </div>
+                <div class="form-group col-xs-2">
+                    <button type="button" class="btn btn-default" onclick="clearForm()">Clear Fields</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group form-group-lg col-xs-6">
+                    <label class="col-sm-4 control-label" for="dateStart">Last Purchase</label>
+                    <div class="col-sm-8">
+                        <div class="form-group">
+                            <div class='input-group date' id='dateStart'>
+                                @Html.EditorFor(m => m.Search.DateStart, new { htmlAttributes = new { @class = "form-control", @type = "text" } })
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group form-group-lg col-xs-6">
+                    <label class="col-sm-4 control-label" for="dateEnd">until</label>
+                    <div class="col-sm-8">
+                        <div class="form-group">
+                            <div class='input-group date' id='dateEnd'>
+                                @Html.EditorFor(m => m.Search.DateEnd, new { htmlAttributes = new { @class = "form-control", @type = "text" } })
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group form-group-lg col-xs-6">
+                    <label class="col-sm-4 control-label" for="classification">Classification</label>
+                    <div class="col-sm-8">
+                        @Html.DropDownListFor(m => m.Search.Classification, new SelectList(Enum.GetValues(typeof(ECustomerClassification))), "", new { @class = "form-control" })
+                    </div>
+                </div>
+                @if (Model.IsAdmin)
+                {
+                    <div class="form-group form-group-lg col-xs-6">
+                        <label class="col-sm-4 control-label" for="seller">Seller</label>
+                        <div class="col-sm-8">
+                            @Html.DropDownListFor(m => m.Search.Seller, Model.Data.Sellers, "", new { @class = "form-control" })
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+    <div class="panel panel-default table-responsive container-table">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">Classification</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Gender</th>
+                    <th scope="col">City</th>
+                    <th scope="col">Region</th>
+                    <th scope="col">Last Purchase</th>
+                    @if (Model.IsAdmin)
+                    {
+                        <th scope="col">Seller</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.TableData)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Classification)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Phone)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Gender)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.City)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Region)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LastPurchase)
+                        </td>
+                        @if (Model.IsAdmin)
+                        {
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Seller)
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $(function () {
+            $('#dateStart').datetimepicker({
+                locale: 'en',
+                format: 'MM/DD/YYYY'
+            });
+
+            $('#dateEnd').datetimepicker({
+                locale: 'en',
+                format: 'MM/DD/YYYY'
+            });
+        });
+
+        function clearForm() {
+            $('#searchForm').trigger("reset");
+        }
+    </script>
+}
+
+
