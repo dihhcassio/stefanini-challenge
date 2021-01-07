@@ -52,7 +52,7 @@ namespace Stefanini_Test.Data.Initializate
                     CreatedAt = DateTime.Now,
                     City = "City " + i,
                     Classification = i % 2 == 0 ? Domain.Enums.ECustomerClassification.Regular : Domain.Enums.ECustomerClassification.Sporadic,
-                    Gender = i % 2 == 0 ? Domain.Enums.ECustumerGender.Male : Domain.Enums.ECustumerGender.Male,
+                    Gender = i % 2 == 0 ? Domain.Enums.ECustumerGender.Male : Domain.Enums.ECustumerGender.Female,
                     Name = "Name " + i,
                     Phone = "Phone " + i,
                     Region = "Region " + i,
